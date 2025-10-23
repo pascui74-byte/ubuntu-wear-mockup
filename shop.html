@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Shop – UbuntuWear</title>
+  <style>
+    :root{--bg:#fffaf5;--card:#ffffff;--ink:#2a2a2a;--muted:#5a5a5a;--brand:#24584f;--accent:#b8481f;--sand:#f3e7d9;--shadow:0 10px 25px rgba(0,0,0,.1);--radius:18px;--radius-sm:12px;--container:1140px}
+    *{box-sizing:border-box} html,body{margin:0;background:var(--bg);color:var(--ink);font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial}
+    a{color:inherit;text-decoration:none} img{max-width:100%;display:block}
+    .container{width:min(100%,var(--container));margin-inline:auto;padding-inline:20px}
+    .button{display:inline-block;padding:12px 18px;border-radius:999px;background:var(--brand);color:#fff;font-weight:700;box-shadow:var(--shadow)}
+    header.site{position:sticky;top:0;background:var(--brand);color:#fff;border-bottom:2px solid var(--accent);box-shadow:0 2px 6px rgba(0,0,0,.3);z-index:50;transition:background .25s ease, box-shadow .25s ease}
+    header.site .nav{display:flex;align-items:center;justify-content:space-between;padding:18px 0;transition:padding .25s ease}
+    header.site.scrolled{background:#1b3f39;box-shadow:0 6px 18px rgba(0,0,0,.35)}
+    header.site.scrolled .nav{padding:10px 0}
+    .brand{display:flex;align-items:center;gap:10px;font-weight:800}
+    .brand-badge{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#f0a06a 50%,var(--brand))}
+    .menu{display:flex;gap:20px;align-items:center}
+    .menu a{color:#fff;font-weight:700}
+    .section{padding:40px 0}
+    .profiles{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+    .profile-card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+    .profile-card .photo{aspect-ratio:4/3;object-fit:cover;width:100%}
+    .profile-card .info{padding:14px}
+    .skills{display:flex;gap:8px;flex-wrap:wrap}
+    .chip{background:var(--sand);padding:6px 10px;border-radius:999px;font-size:.82rem;font-weight:700}
+    .filters{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0 18px}
+    .group{background:var(--card);border:1px solid #e1d7c8;border-radius:12px;padding:10px 12px;box-shadow:var(--shadow)}
+    .hidden{display:none !important}
+    .lightbox{position:fixed;inset:0;background:rgba(0,0,0,.8);display:none;align-items:center;justify-content:center;z-index:80}
+    .lightbox.open{display:flex} .lightbox img{max-width:92vw;max-height:86vh;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+  
+    /* Minor page-specific tweaks */
+    .toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:14px 0 18px}
+    .toolbar .group{background:var(--card);border:1px solid #e1d7c8;border-radius:12px;padding:10px 12px;box-shadow:var(--shadow)}
+    .products{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+    .card{background:var(--card);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column}
+    .card .media{aspect-ratio:4/3}
+    .card .body{padding:14px;display:flex;flex-direction:column;gap:6px}
+    .pagination{display:flex;gap:8px;align-items:center;justify-content:center;margin-top:16px}
+    .pagination button{padding:8px 12px;border-radius:10px;border:1px solid #e1d7c8;background:var(--card)}
+    @media (max-width:900px){.products{grid-template-columns:repeat(2,1fr)}}
+    @media (max-width:640px){.products{grid-template-columns:1fr}}
+    .gallery{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .gallery img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:12px;cursor:pointer}
+    .variant-row{display:flex;gap:10px;align-items:center;margin:10px 0 16px}
+    .price-lg{font-size:clamp(22px,4vw,30px);font-weight:900}
+  </style>
+</head>
+<body>
+  <header class="site"><div class="container nav">
+    <a class="brand" href="index.html"><span class="brand-badge"></span><span>UbuntuWear</span></a>
+    <nav class="menu"><a href="shop.html">Shop</a><a href="index.html#page-sarte">Le Sarte</a></nav>
+  </div></header>
+
+  
+<section class="section">
+  <div class="container">
+    <h1 class="headline" style="font-size:clamp(24px,4vw,36px)">Shop</h1>
+
+    <div class="toolbar" aria-label="Filtri e ordinamento">
+      <div class="group">
+        <label class="meta" for="f-fabric">Tessuto</label>
+        <select id="f-fabric">
+          <option value="all">Tutti</option>
+          <option value="wax">Wax</option>
+          <option value="denim">Denim</option>
+          <option value="cotone">Cotone</option>
+        </select>
+      </div>
+      <div class="group">
+        <label class="meta" for="f-area">Area</label>
+        <select id="f-area">
+          <option value="all">Tutte</option>
+          <option value="west">Africa Occidentale</option>
+          <option value="east">Africa Orientale</option>
+          <option value="south">Africa Australe</option>
+        </select>
+      </div>
+      <div class="group">
+        <label class="meta" for="f-artist">Sarta</label>
+        <select id="f-artist">
+          <option value="all">Tutte</option>
+          <option value="Amina">Amina</option>
+          <option value="Zahara">Zahara</option>
+          <option value="Lindiwe">Lindiwe</option>
+          <option value="Awa">Awa</option>
+          <option value="Hawi">Hawi</option>
+          <option value="Thandi">Thandi</option>
+        </select>
+      </div>
+      <div class="group">
+        <label class="meta" for="sort">Ordina</label>
+        <select id="sort">
+          <option value="featured">In evidenza</option>
+          <option value="price-asc">Prezzo crescente</option>
+          <option value="price-desc">Prezzo decrescente</option>
+        </select>
+      </div>
+    </div>
+
+    <div id="list" class="products" role="list"></div>
+    <div class="pagination">
+      <button id="prev">« Prec</button>
+      <span id="pageInfo" class="meta"></span>
+      <button id="next">Succ »</button>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Mock data
+  const PRODUCTS = [
+    {id:"borsa-wax-rebirth", title:"Borsa Wax Rebirth", price:79, fabric:"wax", area:"west", artist:"Amina", img:"assets/products/borsa-wax-rebirth.jpg"},
+    {id:"kimono-second-life", title:"Kimono Second Life", price:129, fabric:"denim", area:"east", artist:"Zahara", img:"assets/products/kimono-second-life.jpg"},
+    {id:"cuscino-ubuntu", title:"Cuscino Ubuntu", price:39, fabric:"cotone", area:"south", artist:"Lindiwe", img:"assets/products/cuscino-ubuntu.jpg"},
+    {id:"fascia-kora", title:"Fascia Kora", price:19, fabric:"wax", area:"west", artist:"Awa", img:"assets/products/fascia-kora.jpg"}
+  ];
+  const PER_PAGE = 6;
+  let page = 1;
+
+  const $ = (s)=>document.querySelector(s);
+  const list = $("#list");
+  const fFabric = $("#f-fabric");
+  const fArea = $("#f-area");
+  const fArtist = $("#f-artist");
+  const sort = $("#sort");
+  const pageInfo = $("#pageInfo");
+  const prev = $("#prev");
+  const next = $("#next");
+
+  function applyFilters(data){
+    let out = data.filter(p => (fFabric.value==='all' || p.fabric===fFabric.value))
+                  .filter(p => (fArea.value==='all' || p.area===fArea.value))
+                  .filter(p => (fArtist.value==='all' || p.artist===fArtist.value));
+    if(sort.value==='price-asc') out.sort((a,b)=>a.price-b.price);
+    if(sort.value==='price-desc') out.sort((a,b)=>b.price-a.price);
+    return out;
+  }
+  function render(){
+    const filtered = applyFilters(PRODUCTS);
+    const total = filtered.length;
+    const pages = Math.max(1, Math.ceil(total/PER_PAGE));
+    page = Math.min(page, pages);
+    const start = (page-1)*PER_PAGE;
+    const items = filtered.slice(start, start+PER_PAGE);
+    list.innerHTML = items.map(p => `
+      <article class="card" role="listitem">
+        <div class="media"><img src="${p.img}" alt="${p.title}"/></div>
+        <div class="body">
+          <strong>${p.title}</strong>
+          <div class="meta">${p.artist} · ${({'wax':'Tessuto wax','denim':'Denim rigenerato','cotone':'Cotone rigenerato'})[p.fabric]}</div>
+          <div class="price">€${p.price}</div>
+          <a class="button" href="product.html?id=${p.id}">Vedi</a>
+        </div>
+      </article>
+    `).join('');
+    pageInfo.textContent = `Pagina ${page} / ${pages} — ${total} prodotto/i`;
+    prev.disabled = page<=1; next.disabled = page>=pages;
+  }
+  [fFabric,fArea,fArtist,sort].forEach(el => el.addEventListener('change', ()=>{ page=1; render(); }));
+  prev.addEventListener('click', ()=>{ if(page>1){ page--; render(); } });
+  next.addEventListener('click', ()=>{ page++; render(); });
+  render();
+</script>
+
+
+  <div id="lightbox" class="lightbox" aria-hidden="true"><img alt="Anteprima"/></div>
+  <script>
+    // Scroll effect
+    const header = document.querySelector('header.site');
+    const onScroll = () => { if(window.scrollY>10) header.classList.add('scrolled'); else header.classList.remove('scrolled'); };
+    onScroll(); window.addEventListener('scroll', onScroll, {passive:true});
+
+    // Lightbox
+    const lb = document.getElementById('lightbox');
+    const lbImg = lb.querySelector('img');
+    document.addEventListener('click', (e)=>{
+      const t=e.target;
+      if(t && t.tagName==='IMG' && t.closest('.gallery')){ lbImg.src=t.src; lb.classList.add('open'); lb.setAttribute('aria-hidden','false'); }
+      if(t && t.id==='lightbox'){ lb.classList.remove('open'); lb.setAttribute('aria-hidden','true'); }
+    });
+    document.addEventListener('keydown',(e)=>{ if(e.key==='Escape'){ lb.classList.remove('open'); lb.setAttribute('aria-hidden','true'); } });
+  </script>
+</body>
+</html>

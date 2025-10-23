@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>UbuntuWear – Mockup</title>
+  <style>
+    :root{--bg:#fffaf5;--card:#ffffff;--ink:#2a2a2a;--muted:#5a5a5a;--brand:#24584f;--accent:#b8481f;--sand:#f3e7d9;--shadow:0 10px 25px rgba(0,0,0,.1);--radius:18px;--radius-sm:12px;--container:1140px}
+    *{box-sizing:border-box} html,body{margin:0;background:var(--bg);color:var(--ink);font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial}
+    a{color:inherit;text-decoration:none} img{max-width:100%;display:block}
+    .container{width:min(100%,var(--container));margin-inline:auto;padding-inline:20px}
+    .button{display:inline-block;padding:12px 18px;border-radius:999px;background:var(--brand);color:#fff;font-weight:700;box-shadow:var(--shadow)}
+    header.site{position:sticky;top:0;background:var(--brand);color:#fff;border-bottom:2px solid var(--accent);box-shadow:0 2px 6px rgba(0,0,0,.3);z-index:50;transition:background .25s ease, box-shadow .25s ease}
+    header.site .nav{display:flex;align-items:center;justify-content:space-between;padding:18px 0;transition:padding .25s ease}
+    header.site.scrolled{background:#1b3f39;box-shadow:0 6px 18px rgba(0,0,0,.35)}
+    header.site.scrolled .nav{padding:10px 0}
+    .brand{display:flex;align-items:center;gap:10px;font-weight:800}
+    .brand-badge{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#f0a06a 50%,var(--brand))}
+    .menu{display:flex;gap:20px;align-items:center}
+    .menu a{color:#fff;font-weight:700}
+    .section{padding:40px 0}
+    .profiles{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+    .profile-card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+    .profile-card .photo{aspect-ratio:4/3;object-fit:cover;width:100%}
+    .profile-card .info{padding:14px}
+    .skills{display:flex;gap:8px;flex-wrap:wrap}
+    .chip{background:var(--sand);padding:6px 10px;border-radius:999px;font-size:.82rem;font-weight:700}
+    .filters{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0 18px}
+    .group{background:var(--card);border:1px solid #e1d7c8;border-radius:12px;padding:10px 12px;box-shadow:var(--shadow)}
+    .hidden{display:none !important}
+    .lightbox{position:fixed;inset:0;background:rgba(0,0,0,.8);display:none;align-items:center;justify-content:center;z-index:80}
+    .lightbox.open{display:flex} .lightbox img{max-width:92vw;max-height:86vh;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+  </style>
+</head>
+<body>
+  <header class="site"><div class="container nav">
+    <a class="brand" href="#"><span class="brand-badge"></span><span>UbuntuWear</span></a>
+    <nav class="menu"><a href="#sarte">Le Sarte</a></nav>
+  </div></header>
+
+  <section id="page-sarte" class="section">
+    <div class="container">
+      <h2>Le Sarte</h2>
+      <div class="filters">
+        <div class="group">
+          <label for="f-area" class="meta">Area</label>
+          <select id="f-area">
+            <option value="all">Tutte</option>
+            <option value="west">Africa Occidentale</option>
+            <option value="east">Africa Orientale</option>
+            <option value="south">Africa Australe</option>
+          </select>
+        </div>
+        <div class="group">
+          <label><input type="checkbox" class="f-skill" value="Wax"> Wax</label>
+          <label><input type="checkbox" class="f-skill" value="Denim"> Denim</label>
+          <label><input type="checkbox" class="f-skill" value="Home Decor"> Home Decor</label>
+          <label><input type="checkbox" class="f-skill" value="Sartoriale"> Sartoriale</label>
+        </div>
+      </div>
+
+      <div class="profiles">
+        <article class="profile-card" data-area="west" data-skills="Wax,Borse,Patchwork">
+          <img class="photo" alt="Amina al lavoro a Dakar" src="assets/sarte/amina.jpg" />
+          <div class="info">
+            <strong>Amina</strong><div class="meta">Dakar, Senegal</div>
+            <div class="skills"><span class="chip">Wax</span><span class="chip">Patchwork</span></div>
+          </div>
+        </article>
+        <article class="profile-card" data-area="east" data-skills="Denim,Outerwear">
+          <img class="photo" alt="Zahara nel suo atelier a Nairobi" src="assets/sarte/zahara.jpg" />
+          <div class="info">
+            <strong>Zahara</strong><div class="meta">Nairobi, Kenya</div>
+            <div class="skills"><span class="chip">Denim</span><span class="chip">Outerwear</span></div>
+          </div>
+        </article>
+        <article class="profile-card" data-area="south" data-skills="Home Decor,Ricamo">
+          <img class="photo" alt="Lindiwe mentre cuce a Cape Town" src="assets/sarte/lindiwe.jpg" />
+          <div class="info">
+            <strong>Lindiwe</strong><div class="meta">Cape Town, Sudafrica</div>
+            <div class="skills"><span class="chip">Home Decor</span><span class="chip">Ricamo</span></div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <div id="lightbox" class="lightbox" aria-hidden="true"><img alt="Anteprima"/></div>
+
+  <script>
+    // Scroll effect
+    const header = document.querySelector('header.site');
+    const onScroll = () => { if(window.scrollY>10) header.classList.add('scrolled'); else header.classList.remove('scrolled'); };
+    onScroll(); window.addEventListener('scroll', onScroll, {passive:true});
+
+    // Filters
+    const areaSel = document.getElementById('f-area');
+    const skillChecks = Array.from(document.querySelectorAll('.f-skill'));
+    const cards = Array.from(document.querySelectorAll('.profile-card'));
+    function applyFilters(){
+      const area = areaSel.value;
+      const skills = skillChecks.filter(c=>c.checked).map(c=>c.value.toLowerCase());
+      cards.forEach(card=>{
+        const a = (card.dataset.area||'').toLowerCase();
+        const sk = (card.dataset.skills||'').toLowerCase();
+        const aOK = area==='all' || a===area;
+        const sOK = skills.length===0 || skills.every(s=> sk.includes(s));
+        card.classList.toggle('hidden', !(aOK && sOK));
+      });
+    }
+    areaSel.addEventListener('change', applyFilters);
+    skillChecks.forEach(c=>c.addEventListener('change', applyFilters));
+    applyFilters();
+
+    // Lightbox
+    const lb = document.getElementById('lightbox');
+    const lbImg = lb.querySelector('img');
+    document.addEventListener('click', (e)=>{
+      const t=e.target;
+      if(t && t.classList.contains('photo')){ lbImg.src=t.src; lb.classList.add('open'); lb.setAttribute('aria-hidden','false'); }
+      if(t && t.id==='lightbox'){ lb.classList.remove('open'); lb.setAttribute('aria-hidden','true'); }
+    });
+    document.addEventListener('keydown',(e)=>{ if(e.key==='Escape'){ lb.classList.remove('open'); lb.setAttribute('aria-hidden','true'); }});
+  </script>
+</body>
+</html>

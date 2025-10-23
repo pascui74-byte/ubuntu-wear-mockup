@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Prodotto – UbuntuWear</title>
+  <style>
+    :root{--bg:#fffaf5;--card:#ffffff;--ink:#2a2a2a;--muted:#5a5a5a;--brand:#24584f;--accent:#b8481f;--sand:#f3e7d9;--shadow:0 10px 25px rgba(0,0,0,.1);--radius:18px;--radius-sm:12px;--container:1140px}
+    *{box-sizing:border-box} html,body{margin:0;background:var(--bg);color:var(--ink);font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial}
+    a{color:inherit;text-decoration:none} img{max-width:100%;display:block}
+    .container{width:min(100%,var(--container));margin-inline:auto;padding-inline:20px}
+    .button{display:inline-block;padding:12px 18px;border-radius:999px;background:var(--brand);color:#fff;font-weight:700;box-shadow:var(--shadow)}
+    header.site{position:sticky;top:0;background:var(--brand);color:#fff;border-bottom:2px solid var(--accent);box-shadow:0 2px 6px rgba(0,0,0,.3);z-index:50;transition:background .25s ease, box-shadow .25s ease}
+    header.site .nav{display:flex;align-items:center;justify-content:space-between;padding:18px 0;transition:padding .25s ease}
+    header.site.scrolled{background:#1b3f39;box-shadow:0 6px 18px rgba(0,0,0,.35)}
+    header.site.scrolled .nav{padding:10px 0}
+    .brand{display:flex;align-items:center;gap:10px;font-weight:800}
+    .brand-badge{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#f0a06a 50%,var(--brand))}
+    .menu{display:flex;gap:20px;align-items:center}
+    .menu a{color:#fff;font-weight:700}
+    .section{padding:40px 0}
+    .profiles{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+    .profile-card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+    .profile-card .photo{aspect-ratio:4/3;object-fit:cover;width:100%}
+    .profile-card .info{padding:14px}
+    .skills{display:flex;gap:8px;flex-wrap:wrap}
+    .chip{background:var(--sand);padding:6px 10px;border-radius:999px;font-size:.82rem;font-weight:700}
+    .filters{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0 18px}
+    .group{background:var(--card);border:1px solid #e1d7c8;border-radius:12px;padding:10px 12px;box-shadow:var(--shadow)}
+    .hidden{display:none !important}
+    .lightbox{position:fixed;inset:0;background:rgba(0,0,0,.8);display:none;align-items:center;justify-content:center;z-index:80}
+    .lightbox.open{display:flex} .lightbox img{max-width:92vw;max-height:86vh;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+  
+    /* Minor page-specific tweaks */
+    .toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:14px 0 18px}
+    .toolbar .group{background:var(--card);border:1px solid #e1d7c8;border-radius:12px;padding:10px 12px;box-shadow:var(--shadow)}
+    .products{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+    .card{background:var(--card);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column}
+    .card .media{aspect-ratio:4/3}
+    .card .body{padding:14px;display:flex;flex-direction:column;gap:6px}
+    .pagination{display:flex;gap:8px;align-items:center;justify-content:center;margin-top:16px}
+    .pagination button{padding:8px 12px;border-radius:10px;border:1px solid #e1d7c8;background:var(--card)}
+    @media (max-width:900px){.products{grid-template-columns:repeat(2,1fr)}}
+    @media (max-width:640px){.products{grid-template-columns:1fr}}
+    .gallery{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .gallery img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:12px;cursor:pointer}
+    .variant-row{display:flex;gap:10px;align-items:center;margin:10px 0 16px}
+    .price-lg{font-size:clamp(22px,4vw,30px);font-weight:900}
+  </style>
+</head>
+<body>
+  <header class="site"><div class="container nav">
+    <a class="brand" href="index.html"><span class="brand-badge"></span><span>UbuntuWear</span></a>
+    <nav class="menu"><a href="shop.html">Shop</a><a href="index.html#page-sarte">Le Sarte</a></nav>
+  </div></header>
+
+  
+<section class="section">
+  <div class="container">
+    <a href="shop.html" class="meta">← Torna allo Shop</a>
+    <div style="display:grid;grid-template-columns:1.1fr .9fr;gap:24px;margin-top:10px">
+      <div class="gallery">
+        <img id="g1" src="assets/products/borsa-wax-rebirth.jpg" alt="Foto 1 prodotto"/>
+        <img id="g2" src="assets/products/kimono-second-life.jpg" alt="Foto 2 prodotto"/>
+        <img id="g3" src="assets/products/cuscino-ubuntu.jpg" alt="Foto 3 prodotto"/>
+        <img id="g4" src="assets/products/fascia-kora.jpg" alt="Foto 4 prodotto"/>
+      </div>
+      <div>
+        <h1 id="p-title" class="headline" style="font-size:clamp(24px,4vw,36px)">Prodotto</h1>
+        <div id="p-meta" class="meta">—</div>
+        <div class="price-lg" id="p-price">€—</div>
+        <p id="p-desc" class="subhead">—</p>
+
+        <div class="variant-row">
+          <label class="meta" for="v-colore">Colore</label>
+          <select id="v-colore">
+            <option>Terracotta</option><option>Indaco</option><option>Salvia</option>
+          </select>
+        </div>
+        <div class="variant-row">
+          <label class="meta" for="v-qty">Q.tà</label>
+          <input id="v-qty" type="number" min="1" value="1" style="width:90px;padding:10px;border:1px solid #ddd;border-radius:10px" />
+        </div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;margin:14px 0 20px">
+          <a class="button" href="#">Aggiungi al carrello</a>
+          <a class="button" href="#" style="background:var(--accent)">Compra ora</a>
+        </div>
+        <ul class="meta" style="line-height:1.9;padding-left:18px">
+          <li>Tracciabilità con QR code</li>
+          <li>Packaging plastic-free</li>
+          <li>Spedizione a impatto compensato</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Mock product DB (must match shop)
+  const DB = {
+    "borsa-wax-rebirth": {title:"Borsa Wax Rebirth", price:79, artist:"Amina", area:"west", fabric:"wax", desc:"Borsa in patchwork wax riciclati, foderata in cotone rigenerato.", img:"assets/products/borsa-wax-rebirth.jpg"},
+    "kimono-second-life": {title:"Kimono Second Life", price:129, artist:"Zahara", area:"east", fabric:"denim", desc:"Kimono in denim rigenerato, taglio unisex, cuciture rinforzate.", img:"assets/products/kimono-second-life.jpg"},
+    "cuscino-ubuntu": {title:"Cuscino Ubuntu", price:39, artist:"Lindiwe", area:"south", fabric:"cotone", desc:"Cuscino decor patchwork in cotone rigenerato.", img:"assets/products/cuscino-ubuntu.jpg"},
+    "fascia-kora": {title:"Fascia Kora", price:19, artist:"Awa", area:"west", fabric:"wax", desc:"Fascia capelli double-face in wax, zero waste.", img:"assets/products/fascia-kora.jpg"}
+  };
+  const params = new URLSearchParams(location.search);
+  const id = params.get('id') || "borsa-wax-rebirth";
+  const p = DB[id];
+  document.getElementById('p-title').textContent = p.title;
+  document.getElementById('p-price').textContent = "€"+p.price;
+  document.getElementById('p-desc').textContent = p.desc;
+  document.getElementById('p-meta').textContent = p.artist+" · "+({"wax":"Tessuto wax","denim":"Denim rigenerato","cotone":"Cotone rigenerato"}[p.fabric]);
+  // put main image first
+  document.getElementById('g1').src = p.img;
+</script>
+
+
+  <div id="lightbox" class="lightbox" aria-hidden="true"><img alt="Anteprima"/></div>
+  <script>
+    // Scroll effect
+    const header = document.querySelector('header.site');
+    const onScroll = () => { if(window.scrollY>10) header.classList.add('scrolled'); else header.classList.remove('scrolled'); };
+    onScroll(); window.addEventListener('scroll', onScroll, {passive:true});
+
+    // Lightbox
+    const lb = document.getElementById('lightbox');
+    const lbImg = lb.querySelector('img');
+    document.addEventListener('click', (e)=>{
+      const t=e.target;
+      if(t && t.tagName==='IMG' && t.closest('.gallery')){ lbImg.src=t.src; lb.classList.add('open'); lb.setAttribute('aria-hidden','false'); }
+      if(t && t.id==='lightbox'){ lb.classList.remove('open'); lb.setAttribute('aria-hidden','true'); }
+    });
+    document.addEventListener('keydown',(e)=>{ if(e.key==='Escape'){ lb.classList.remove('open'); lb.setAttribute('aria-hidden','true'); } });
+  </script>
+</body>
+</html>
