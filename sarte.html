@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Le Sarte – UbuntuWear</title>
+  <style>:root{--brand:#24584f;--accent:#b8481f;--card:#fff;--bg:#fffaf5;--ink:#222;--shadow:0 10px 25px rgba(0,0,0,.1);--radius:18px;--container:1140px}
+    body{background:var(--bg);color:var(--ink);font-family:ui-sans-serif,system-ui} .container{width:min(100%,var(--container));margin:auto;padding:0 20px}
+    header.site{position:sticky;top:0;background:var(--brand);color:#fff;border-bottom:2px solid var(--accent);box-shadow:0 2px 6px rgba(0,0,0,.3)}
+    header.site .nav{display:flex;justify-content:space-between;align-items:center;padding:18px 0}
+    .brand-badge{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#f0a06a 50%,var(--brand))}
+    .menu{display:flex;gap:20px} .menu a{color:#fff;font-weight:700}
+    .profiles{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}.profile-card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+    .profile-card .photo{width:100%;aspect-ratio:4/3;object-fit:cover}.filters{display:flex;gap:10px;margin:12px 0 18px}.group{background:#fff;border:1px solid #e1d7c8;border-radius:12px;padding:10px 12px;box-shadow:var(--shadow)}
+    .lightbox{position:fixed;inset:0;background:rgba(0,0,0,.8);display:none;align-items:center;justify-content:center;z-index:80}
+    .lightbox.open{display:flex}.lightbox img{max-width:92vw;max-height:86vh;border-radius:12px}</style>
+</head>
+<body>
+  <header class="site"><div class="container nav">
+    <a class="brand" href="index.html"><span class="brand-badge"></span><span>UbuntuWear</span></a>
+    <nav class="menu"><a href="index.html">Home</a><a href="shop.html">Shop</a><a href="sarte.html">Le Sarte</a></nav>
+  </div></header>
+
+  <section class='section'><div class='container'><h1>Le Sarte</h1></div></section>
+
+  <div id="lightbox" class="lightbox" aria-hidden="true"><img alt="Anteprima foto" /></div>
+  <script>
+    const header = document.querySelector('header.site');
+    const onScroll = () => { header.classList.toggle('scrolled', window.scrollY>10); };
+    onScroll(); window.addEventListener('scroll', onScroll, {passive:true});
+  </script>
+</body>
+</html>
