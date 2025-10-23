@@ -1,22 +1,719 @@
-<!DOCTYPE html><html lang='it'><head>
-    <meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1'>
-    <style>:root{--brand:#24584f;--accent:#b8481f;--card:#fff;--bg:#fffaf5;--ink:#222;--shadow:0 10px 25px rgba(0,0,0,.1);--radius:18px;--container:1140px}
-    body{background:var(--bg);color:var(--ink);font-family:ui-sans-serif,system-ui} .container{width:min(100%,var(--container));margin:auto;padding:0 20px}
-    header.site{position:sticky;top:0;background:var(--brand);color:#fff;border-bottom:2px solid var(--accent);box-shadow:0 2px 6px rgba(0,0,0,.3)}
-    header.site .nav{display:flex;justify-content:space-between;align-items:center;padding:18px 0}
-    .brand-badge{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#f0a06a 50%,var(--brand))}
-    .menu{display:flex;gap:20px} .menu a{color:#fff;font-weight:700}
-    .profiles{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}.profile-card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
-    .profile-card .photo{width:100%;aspect-ratio:4/3;object-fit:cover}.filters{display:flex;gap:10px;margin:12px 0 18px}.group{background:#fff;border:1px solid #e1d7c8;border-radius:12px;padding:10px 12px;box-shadow:var(--shadow)}
-    .lightbox{position:fixed;inset:0;background:rgba(0,0,0,.8);display:none;align-items:center;justify-content:center;z-index:80}
-    .lightbox.open{display:flex}.lightbox img{max-width:92vw;max-height:86vh;border-radius:12px}</style></head>
-    <body><header class='site'><div class='container nav'><a class='brand' href='index.html'><span class='brand-badge'></span><span>UbuntuWear</span></a>
-    <nav class='menu'><a href='index.html'>Home</a><a href='shop.html'>Shop</a><a href='sarte.html'>Le Sarte</a></nav></div></header>
-    <section id='page-sarte' class='section'><div class='container'><h2>Le Sarte</h2>
-    <div class='filters'><div class='group'><select id='f-area'><option value='all'>Tutte</option><option value='west'>Ovest</option></select></div></div>
-    <div class='profiles'><article class='profile-card' data-area='west' data-skills='Wax'><img class='photo' src='assets/sarte/amina.jpg'/></article></div>
-    </div></section>
-    <div id='lightbox' class='lightbox'><img alt='Anteprima'/></div>
-    <script>const header=document.querySelector('header.site');const onScroll=()=>{{header.classList.toggle('scrolled',window.scrollY>10)}};onScroll();window.addEventListener('scroll',onScroll);
-    const lb=document.getElementById('lightbox'),img=lb.querySelector('img');document.addEventListener('click',e=>{{const t=e.target;if(t&&t.classList.contains('photo')){{img.src=t.src;lb.classList.add('open')}}if(t&&t.id==='lightbox')lb.classList.remove('open')}});</script>
-    </body></html>
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>UbuntuWear – Moda etica, cucita a mano</title>
+  <style>
+    :root{
+      --bg:#fffaf5;
+      --card:#ffffff;
+      --ink:#2a2a2a;
+      --muted:#5a5a5a;
+      --brand:#24584f; /* verde più scuro per contrasto */
+      --accent:#b8481f; /* terracotta più intenso */
+      --sand:#f3e7d9;
+      --shadow:0 10px 25px rgba(0,0,0,.1);
+      --radius:18px;
+      --radius-sm:12px;
+      --container:1140px;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Apple Color Emoji","Segoe UI Emoji";}
+    a{color:inherit;text-decoration:none}
+    img{max-width:100%;display:block}
+    .container{width:min(100%, var(--container));margin-inline:auto;padding-inline:20px}
+    .button{display:inline-block;padding:14px 20px;border-radius:999px;background:var(--brand);color:#fff;font-weight:600;letter-spacing:.2px;box-shadow:var(--shadow);transition:transform .2s ease, box-shadow .2s ease}
+    .button:hover{transform:translateY(-1px);box-shadow:0 16px 30px rgba(0,0,0,.12)}
+    .button.alt{background:var(--accent)}
+    .kicker{font-size:.85rem;text-transform:uppercase;letter-spacing:.18em;color:var(--accent);font-weight:700}
+    .headline{font-size:clamp(28px, 4.5vw, 52px);line-height:1.06;margin:10px 0 16px}
+    .subhead{font-size:clamp(16px, 2.2vw, 20px);color:var(--muted);max-width:62ch}
+
+    /* Header */
+    header.site{position:sticky;top:0;background:var(--brand);color:#fff;border-bottom:2px solid var(--accent);box-shadow:0 2px 6px rgba(0,0,0,0.3);z-index:50;transition:background .25s ease, box-shadow .25s ease}
+header.site .nav{padding:18px 0;transition:padding .25s ease}
+header.site.scrolled{background:#1b3f39;box-shadow:0 6px 18px rgba(0,0,0,.35)}
+header.site.scrolled .nav{padding:10px 0}
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:14px 0}
+    .brand{display:flex;align-items:center;gap:10px;font-weight:800}
+    .brand-badge{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg, var(--accent), #f0a06a 50%, var(--brand));box-shadow:inset 0 0 0 3px rgba(255,255,255,.6)}
+    .menu{display:flex;gap:20px;align-items:center}
+    .menu a{color:#fff;font-weight:700;transition:color .2s}
+    .menu a:hover{color:var(--accent)}
+    .menu a:hover{color:var(--brand)}
+    .menu .icon{font-variation-settings:'FILL' 1}
+    .utils{display:flex;gap:12px;align-items:center}
+    .search{display:none}
+    @media (min-width:900px){.search{display:block}}
+
+    /* Hero */
+    .hero{position:relative;isolation:isolate}
+    .hero-wrap{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center;padding:48px 0}
+    .hero-art{position:relative;border-radius:var(--radius);overflow:hidden;background:linear-gradient(120deg,#f0d9bf,var(--sand));box-shadow:var(--shadow)}
+    .hero-art::before{content:"";position:absolute;inset:0;background-image:radial-gradient(circle at 20% 20%, rgba(200,90,46,.55) 0 20%, transparent 21%),radial-gradient(circle at 80% 30%, rgba(47,109,98,.45) 0 18%, transparent 19%),radial-gradient(circle at 60% 80%, rgba(47,109,98,.25) 0 18%, transparent 19%);mix-blend-mode:multiply}
+    .hero-img{aspect-ratio:4/3;width:100%;object-fit:cover;opacity:.9}
+    .hero-badges{position:absolute;inset:auto 14px 14px auto;display:flex;gap:10px}
+    .pill{padding:8px 12px;border-radius:999px;background:#fff;color:#242424;font-weight:700;box-shadow:var(--shadow);font-size:.85rem}
+
+    /* Project / Icons */
+    .features{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:28px}
+    .feature{background:var(--card);border-radius:var(--radius-sm);padding:18px;box-shadow:var(--shadow)}
+    .feature h4{margin:8px 0 6px}
+    .feature p{margin:0;color:var(--muted)}
+    .emoji{font-size:22px}
+
+    /* Products */
+    .section{padding:56px 0}
+    .section .head{display:flex;align-items:end;justify-content:space-between;margin-bottom:20px}
+    .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+    .card{background:var(--card);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column}
+    .card .media{background:linear-gradient(120deg,#eedfd1,#f7efe6);position:relative}
+    .tag{position:absolute;left:12px;top:12px;background:#fff;border-radius:999px;padding:6px 10px;font-size:.8rem;font-weight:700;box-shadow:var(--shadow)}
+    .ratio{aspect-ratio:1/1}
+    .card .body{padding:14px 14px 18px;display:flex;flex-direction:column;gap:6px}
+    .meta{font-size:.9rem;color:var(--muted)}
+    .price{font-weight:800}
+
+    /* Sarte */
+    .artists{display:grid;grid-template-columns:repeat(6,1fr);gap:16px}
+    .avatar{background:linear-gradient(120deg,#d6eadf,#f0d9bf);border-radius:999px;aspect-ratio:1/1;box-shadow:var(--shadow)}
+    .artist{text-align:center;font-weight:700}
+
+    /* Process */
+    .process{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+    .step{background:var(--card);border-radius:var(--radius-sm);padding:18px;box-shadow:var(--shadow)}
+    .step .num{font-weight:900;color:var(--accent)}
+
+    /* Impact */
+    .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+    .stat{background:var(--card);border-radius:var(--radius);padding:26px;box-shadow:var(--shadow);text-align:center}
+    .stat .value{font-size:clamp(26px,5vw,38px);font-weight:900}
+    .stat .label{color:var(--muted)}
+
+    /* Blog */
+    .blog{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+    .post{background:var(--card);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow)}
+
+    /* CTA */
+    .cta{background:repeating-linear-gradient(45deg, #2f6d62 0 16px,#356f65 16px 32px,#c85a2e 32px 48px,#ce6e45 48px 64px);border-radius:var(--radius);color:#fff;padding:40px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+
+    /* Footer */
+    footer{padding:40px 0;border-top:1px dashed #e9dccd;color:#4a4a4a}
+    .foot{display:grid;grid-template-columns:1.2fr 1fr 1fr 1fr;gap:20px}
+    .newsletter input{width:100%;padding:12px 14px;border-radius:12px;border:1px solid #ddd;margin-right:10px}
+
+    /* Responsive */
+    @media (max-width:1000px){
+      .hero-wrap{grid-template-columns:1fr;gap:24px}
+      .grid{grid-template-columns:repeat(2,1fr)}
+      .artists{grid-template-columns:repeat(4,1fr)}
+      .process{grid-template-columns:repeat(2,1fr)}
+      .stats{grid-template-columns:repeat(3,1fr)}
+      .blog{grid-template-columns:repeat(2,1fr)}
+      .foot{grid-template-columns:1fr 1fr}
+    }
+    @media (max-width:640px){
+      .grid{grid-template-columns:1fr}
+      .artists{grid-template-columns:repeat(3,1fr)}
+      .process{grid-template-columns:1fr}
+      .stats{grid-template-columns:1fr}
+      .blog{grid-template-columns:1fr}
+      .cta{flex-direction:column;align-items:flex-start}
+    }
+    /* === Dark Mode & Mobile Menu Enhancements === */
+  :root.dark{
+    --bg:#0f1311; --card:#161b19; --ink:#e9f0ed; --muted:#a7b5b0; --brand:#7cd2be; --accent:#ff9367; --sand:#1e2421; --shadow:0 10px 25px rgba(0,0,0,.45);
+  }
+  @media (prefers-color-scheme: dark){
+    :root{--bg:#0f1311; --card:#161b19; --ink:#e9f0ed; --muted:#a7b5b0; --brand:#7cd2be; --accent:#ff9367; --sand:#1e2421; --shadow:0 10px 25px rgba(0,0,0,.45)}
+  }
+  .toggle{appearance:none;border:0;background:var(--card);color:var(--ink);padding:10px 12px;border-radius:999px;box-shadow:var(--shadow);font-weight:700;cursor:pointer}
+  .hamburger{display:none;appearance:none;border:0;background:var(--card);padding:10px 12px;border-radius:12px;box-shadow:var(--shadow);cursor:pointer}
+  .hamburger:after{content:"☰"}
+  @media (max-width:900px){
+    .menu{position:absolute;left:0;right:0;top:64px;background:rgba(255,250,245,.98);backdrop-filter:blur(8px);padding:14px 20px;display:none;flex-direction:column;gap:14px;border-bottom:1px solid #eee}
+    .dark .menu{background:rgba(22,27,25,.9);border-color:#2a2f2d}
+    .menu.open{display:flex}
+    .hamburger{display:inline-block}
+  }
+  .dark header.site{background:rgba(22,27,25,.7);border-color:#2a2f2d}
+  .dark .cta{color:#0b0b0b}
+  /* === Profiles & Map === */
+  .profiles{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  .profile-card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;display:flex;flex-direction:column}
+  .profile-card .photo{aspect-ratio:4/3;object-fit:cover;width:100%}
+  .profile-card .info{padding:16px;display:flex;flex-direction:column;gap:6px}
+  .profile-card .where{color:var(--muted);font-size:.95rem}
+  .profile-card .skills{display:flex;gap:8px;flex-wrap:wrap}
+  .chip{background:var(--sand);padding:6px 10px;border-radius:999px;font-size:.82rem;font-weight:700}
+  .map-wrap{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px}
+  .map{width:100%;height:auto;display:block}
+  .legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:10px;color:var(--muted)}
+  .dot{width:10px;height:10px;border-radius:50%;background:var(--accent);display:inline-block;margin-right:6px}
+  @media (max-width:1000px){.profiles{grid-template-columns:repeat(2,1fr)}}
+  @media (max-width:640px){.profiles{grid-template-columns:1fr}}
+  /* Header scroll state helpers */
+  .logo-small{transform-origin:left center;transition:transform .25s ease}
+  header.site.scrolled .logo-small{transform:scale(.92)}
+  /* Filters & Lightbox */
+  .filters{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0 18px}
+  .filters select, .filters input[type="checkbox"]{accent-color:var(--brand)}
+  .filters .group{background:var(--card);border:1px solid #e1d7c8;border-radius:12px;padding:10px 12px;box-shadow:var(--shadow)}
+  .filters label{margin-right:10px}
+  .hidden{display:none !important}
+  .lightbox{position:fixed;inset:0;background:rgba(0,0,0,.8);display:none;align-items:center;justify-content:center;z-index:80}
+  .lightbox.open{display:flex}
+  .lightbox img{max-width:92vw;max-height:86vh;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+</style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="site">
+    <div class="container nav" aria-label="Barra di navigazione">
+      <a class="brand" href="#" aria-label="Homepage UbuntuWear">
+        <span class="brand-badge logo-small" aria-hidden="true"></span>
+        <span>UbuntuWear</span>
+      </a>
+      <nav id="mainNav" class="menu" aria-label="Menu principale">
+        <a href="index.html">Home</a>
+        <a href="shop.html">Shop</a>
+        <a href="sarte.html">Le Sarte</a>
+        <a href="#impatto">Impatto</a>
+        <a href="#blog">Blog</a>
+        <a href="#chi">Chi Siamo</a>
+      </nav>
+      <div class="utils">
+        <button id="themeToggle" class="toggle" title="Toggle tema" aria-label="Cambia tema">🌗</button>
+        <button id="menuToggle" class="hamburger" title="Menu" aria-label="Apri menu"></button>
+        <span class="search" role="search">🔎</span>
+        <a href="#" title="Carrello" aria-label="Vai al carrello">🛒</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container hero-wrap">
+      <div>
+        <span class="kicker">Moda etica e circolare</span>
+        <h1 class="headline">Cucita a mano da sarte africane, con tessuti recuperati.</h1>
+        <p class="subhead">Ogni capo è un pezzo unico. Sostieni il lavoro artigianale femminile e dai nuova vita ai tessuti di scarto.</p>
+        <div style="margin-top:20px; display:flex; gap:10px; flex-wrap:wrap">
+          <a class="button" href="#shop">Scopri la collezione</a>
+          <a class="button alt" href="#impatto">Il nostro impatto</a>
+        </div>
+        <div class="features" aria-label="Valori del progetto">
+          <div class="feature"><div class="emoji" aria-hidden="true">♻️</div><h4>Upcycling</h4><p>Tessuti salvati dallo spreco.</p></div>
+          <div class="feature"><div class="emoji" aria-hidden="true">🤝</div><h4>Empowerment</h4><p>Lavoro dignitoso per le sarte.</p></div>
+          <div class="feature"><div class="emoji" aria-hidden="true">🌍</div><h4>Cultura</h4><p>Storie autentiche dietro ogni capo.</p></div>
+        </div>
+      </div>
+      <div class="hero-art">
+        <img class="hero-img" alt="Sarta che cuce con tessuti vivaci africani" src="data:image/svg+xml;utf8,<?xml version='1.0' encoding='UTF-8'?><svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 900'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%23ffe6cc'/><stop offset='1' stop-color='%23ffd9b5'/></linearGradient></defs><rect width='1200' height='900' fill='url(%23g)'/><g fill='%23c85a2e' opacity='.6'><circle cx='200' cy='200' r='120'/><circle cx='980' cy='260' r='90'/></g><g fill='%232f6d62' opacity='.5'><circle cx='700' cy='740' r='110'/><circle cx='450' cy='520' r='80'/></g><text x='60' y='860' font-size='42' font-family='Arial' fill='%232a2a2a' opacity='.6'>Placeholder hero image</text></svg>"/>
+        <div class="hero-badges" aria-hidden="true">
+          <div class="pill">Pezzi unici</div>
+          <div class="pill">Fatto a mano</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Prodotti in evidenza -->
+  <section id="shop" class="section">
+    <div class="container">
+      <div class="head">
+        <div>
+          <div class="kicker">Shop</div>
+          <h2 class="headline" style="font-size:clamp(22px,3vw,34px)">Le nostre creazioni</h2>
+        </div>
+        <a class="button" href="#">Vedi tutto</a>
+      </div>
+      <div class="grid" role="list">
+        <!-- Card Prodotto -->
+        <article class="card" role="listitem">
+          <div class="media ratio">
+            <span class="tag">Amina · Dakar</span>
+            <img alt="Borsa patchwork in tessuti wax" src="https://images.unsplash.com/photo-1520975922322-7da5ee06a5a0?q=80&w=1200&auto=format&fit=crop"/>
+          </div>
+          <div class="body">
+            <strong>Borsa Wax Rebirth</strong>
+            <div class="meta">Tessuti recuperati · Pezzo unico</div>
+            <div class="price">€79</div>
+            <a class="button" href="#prodotto">Scopri</a>
+          </div>
+        </article>
+
+        <article class="card" role="listitem">
+          <div class="media ratio">
+            <span class="tag">Zahara · Nairobi</span>
+            <img alt="Kimono in denim rigenerato" src="https://images.unsplash.com/photo-1541099649105-f69ad21f3246?q=80&w=1200&auto=format&fit=crop"/>
+          </div>
+          <div class="body">
+            <strong>Kimono Second Life</strong>
+            <div class="meta">Denim rigenerato</div>
+            <div class="price">€129</div>
+            <a class="button" href="#prodotto">Scopri</a>
+          </div>
+        </article>
+
+        <article class="card" role="listitem">
+          <div class="media ratio">
+            <span class="tag">Lindiwe · Cape Town</span>
+            <img alt="Cuscino decor patchwork" src="https://images.unsplash.com/photo-1560343090-f0409e92791a?q=80&w=1200&auto=format&fit=crop"/>
+          </div>
+          <div class="body">
+            <strong>Cuscino Ubuntu</strong>
+            <div class="meta">Casa & Decor</div>
+            <div class="price">€39</div>
+            <a class="button" href="#prodotto">Scopri</a>
+          </div>
+        </article>
+
+        <article class="card" role="listitem">
+          <div class="media ratio">
+            <span class="tag">Awa · Abidjan</span>
+            <img alt="Fascia capelli in wax" src="https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?q=80&w=1200&auto=format&fit=crop"/>
+          </div>
+          <div class="body">
+            <strong>Fascia Kora</strong>
+            <div class="meta">Accessori</div>
+            <div class="price">€19</div>
+            <a class="button" href="#prodotto">Scopri</a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pagina "Le Sarte" dedicata -->
+  <section id="page-sarte" class="section" aria-labelledby="page-sarte-title">
+    <div class="container">
+      <div class="head">
+        <div>
+          <div class="kicker">Le Sarte</div>
+          <h2 id="page-sarte-title" class="headline" style="font-size:clamp(22px,3vw,34px)">Storie, luoghi e maestria</h2>
+        </div>
+      </div>
+
+      <!-- Mappa -->
+      <div class="map-wrap" style="margin-bottom:24px">
+        <svg class="map" viewBox="0 0 900 700" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Mappa dell'Africa con località delle sarte">
+          <defs>
+            <linearGradient id="afg" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#f3e7d9"/>
+              <stop offset="1" stop-color="#e9dccd"/>
+            </linearGradient>
+          </defs>
+          <!-- Africa silhouette (semplificata) -->
+          <path d="M480 40c30 10 60 35 92 42 18 4 37 1 55 9 20 9 23 20 36 35 19 23 36 35 35 58-1 18-10 36-4 53 3 9 13 16 14 26 2 19-18 36-14 55 3 15 20 23 26 37 7 18 0 38-6 56-8 22-16 44-31 62-13 16-36 20-51 33-14 12-18 34-33 44-18 12-41 12-61 19-26 9-46 29-72 38-29 10-63 5-91-8-27-13-50-35-78-45-22-8-47-5-67-17-20-11-28-34-44-50-18-18-44-28-62-46-21-20-32-49-38-77-5-24 3-48 10-72 6-19 15-37 27-53 10-13 25-22 36-35 12-14 18-32 31-45 15-15 35-23 53-34 17-10 35-21 54-27 19-7 39-5 59-8 19-3 38-12 57-13 24-1 46 9 69 14z" fill="url(#afg)" stroke="#d7c7b2"/>
+          <!-- Markers (approximate positions) -->
+          <g fill="#c85a2e">
+            <circle cx="420" cy="420" r="7"><title>Kinshasa</title></circle>
+            <circle cx="300" cy="500" r="7"><title>Abidjan</title></circle>
+            <circle cx="520" cy="560" r="7"><title>Johannesburg</title></circle>
+            <circle cx="540" cy="380" r="7"><title>Nairobi</title></circle>
+            <circle cx="520" cy="430" r="7"><title>Addis Abeba</title></circle>
+            <circle cx="260" cy="420" r="7"><title>Dakar</title></circle>
+            <circle cx="470" cy="620" r="7"><title>Cape Town</title></circle>
+          </g>
+        </svg>
+        <div class="legend"><span class="dot"></span> Località delle nostre sarte</div>
+      </div>
+
+      <!-- Schede profilo -->
+      <!-- FILTRI -->
+      <div class="filters" aria-label="Filtri sarte">
+        <div class="group">
+          <label for="f-area" class="meta">Area</label>
+          <select id="f-area" aria-label="Filtra per area">
+            <option value="all">Tutte</option>
+            <option value="west">Africa Occidentale</option>
+            <option value="east">Africa Orientale</option>
+            <option value="south">Africa Australe</option>
+            <option value="central">Africa Centrale</option>
+            <option value="north">Africa Settentrionale</option>
+          </select>
+        </div>
+        <div class="group">
+          <span class="meta" style="margin-right:6px">Competenze</span>
+          <label><input type="checkbox" class="f-skill" value="Wax"> Wax</label>
+          <label><input type="checkbox" class="f-skill" value="Denim"> Denim</label>
+          <label><input type="checkbox" class="f-skill" value="Home Decor"> Home Decor</label>
+          <label><input type="checkbox" class="f-skill" value="Accessori"> Accessori</label>
+          <label><input type="checkbox" class="f-skill" value="Tessitura"> Tessitura</label>
+          <label><input type="checkbox" class="f-skill" value="Sartoriale"> Sartoriale</label>
+        </div>
+      </div>
+
+      <div class="profiles" role="list">
+        <article class="profile-card" role="listitem" data-area="west" data-skills="Wax,Borse,Patchwork">
+          <img class="photo" alt="Amina al lavoro a Dakar" src="assets/sarte/amina.jpg"/>
+          <div class="info">
+            <strong>Amina</strong>
+            <div class="where">Dakar, Senegal</div>
+            <p class="meta">Specializzata in patchwork wax e borse strutturate. Collabora dal 2023.</p>
+            <div class="skills"><span class="chip">Wax</span><span class="chip">Borse</span><span class="chip">Patchwork</span></div>
+            <div style="margin-top:10px"><a class="button" href="#shop">Vedi prodotti</a></div>
+          </div>
+        </article>
+        <article class="profile-card" role="listitem" data-area="east" data-skills="Denim,Outerwear">
+          <img class="photo" alt="Zahara nel suo atelier a Nairobi" src="assets/sarte/zahara.jpg"/>
+          <div class="info">
+            <strong>Zahara</strong>
+            <div class="where">Nairobi, Kenya</div>
+            <p class="meta">Riciclo denim e capi outerwear minimal. Formatrice per giovani apprendiste.</p>
+            <div class="skills"><span class="chip">Denim</span><span class="chip">Outerwear</span></div>
+            <div style="margin-top:10px"><a class="button" href="#shop">Vedi prodotti</a></div>
+          </div>
+        </article>
+        <article class="profile-card" role="listitem" data-area="south" data-skills="Home Decor,Ricamo">
+          <img class="photo" alt="Lindiwe mentre cuce a Cape Town" src="assets/sarte/lindiwe.jpg"/>
+          <div class="info">
+            <strong>Lindiwe</strong>
+            <div class="where">Cape Town, Sudafrica</div>
+            <p class="meta">Accessori per la casa con scampoli premium e cuciture decorative.</p>
+            <div class="skills"><span class="chip">Home Decor</span><span class="chip">Ricamo</span></div>
+            <div style="margin-top:10px"><a class="button" href="#shop">Vedi prodotti</a></div>
+          </div>
+        </article>
+        <article class="profile-card" role="listitem" data-area="west" data-skills="Accessori,Zero-waste">
+          <img class="photo" alt="Awa ad Abidjan con tessuti colorati" src="assets/sarte/awa.jpg"/>
+          <div class="info">
+            <strong>Awa</strong>
+            <div class="where">Abidjan, Costa d'Avorio</div>
+            <p class="meta">Fasce e accessori moda rapidi da produrre con zero sprechi.</p>
+            <div class="skills"><span class="chip">Accessori</span><span class="chip">Zero-waste</span></div>
+            <div style="margin-top:10px"><a class="button" href="#shop">Vedi prodotti</a></div>
+          </div>
+        </article>
+        <article class="profile-card" role="listitem" data-area="east" data-skills="Tessitura,Fibre naturali">
+          <img class="photo" alt="Hawi ad Addis Abeba" src="assets/sarte/hawi.jpg"/>
+          <div class="info">
+            <strong>Hawi</strong>
+            <div class="where">Addis Abeba, Etiopia</div>
+            <p class="meta">Tessitura locale e texture materiche con fibre naturali.</p>
+            <div class="skills"><span class="chip">Tessitura</span><span class="chip">Fibre naturali</span></div>
+            <div style="margin-top:10px"><a class="button" href="#shop">Vedi prodotti</a></div>
+          </div>
+        </article>
+        <article class="profile-card" role="listitem" data-area="south" data-skills="Sartoriale,Giacche">
+          <img class="photo" alt="Thandi a Johannesburg" src="assets/sarte/thandi.jpg"/>
+          <div class="info">
+            <strong>Thandi</strong>
+            <div class="where">Johannesburg, Sudafrica</div>
+            <p class="meta">Capi sartoriali su misura e giacche strutturate.</p>
+            <div class="skills"><span class="chip">Sartoriale</span><span class="chip">Giacche</span></div>
+            <div style="margin-top:10px"><a class="button" href="#shop">Vedi prodotti</a></div>
+          </div>
+        </article>
+      </div>
+      <p class="meta" style="margin-top:12px">Nota: le immagini sono segnaposto (Unsplash). In produzione, sostituiscile con scatti originali.</p>
+    </div>
+  </section>
+
+  <!-- Nota immagini -->
+  <!-- Le immagini delle sarte usano Unsplash Source API con query mirate (african, seamstress, ecc.). In produzione sostituire con foto originali o asset con licenza dedicata. -->
+
+  <!-- Prodotto: mockup pagina prodotto -->
+  <section id="prodotto" class="section" aria-labelledby="product-title">
+    <div class="container">
+      <div class="head">
+        <div>
+          <div class="kicker">Pagina Prodotto (mockup)</div>
+          <h2 id="product-title" class="headline" style="font-size:clamp(22px,3vw,34px)">Borsa Wax Rebirth</h2>
+        </div>
+      </div>
+      <div class="product" style="display:grid;grid-template-columns:1.1fr .9fr;gap:28px">
+        <div>
+          <div class="card" style="overflow:hidden">
+            <div class="media ratio">
+              <img alt="Galleria borsa" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 900'><defs><pattern id='pp' width='40' height='40' patternUnits='userSpaceOnUse'><rect width='40' height='40' fill='%23eedfd1'/><circle cx='20' cy='20' r='10' fill='%23c85a2e'/></pattern></defs><rect width='900' height='900' fill='url(%23pp)'/></svg>" />
+            </div>
+          </div>
+          <div style="display:flex;gap:10px;margin-top:10px">
+            <div class="avatar" title="Thumb 1"></div>
+            <div class="avatar" title="Thumb 2" style="background:linear-gradient(120deg,#d7e3f0,#bcd0e0)"></div>
+            <div class="avatar" title="Thumb 3" style="background:linear-gradient(120deg,#e9dccd,#f7efe6)"></div>
+          </div>
+        </div>
+        <div>
+          <p class="meta">Realizzato da <strong>Amina</strong> · Dakar · Tessuti recuperati · Pezzo unico</p>
+          <div class="price" style="font-size:clamp(24px,4vw,32px);margin:8px 0">€79</div>
+          <p class="subhead">Borsa patchwork creata con rimanenze di wax africani. Foderata in cotone rigenerato, rinforzi interni in materiale riciclato.</p>
+          <div style="margin:16px 0">
+            <label class="meta" for="selColore">Colore</label><br/>
+            <select id="selColore" style="padding:10px;border-radius:10px;border:1px solid #ddd;min-width:220px">
+              <option>Terracotta</option>
+              <option>Indaco</option>
+              <option>Salvia</option>
+            </select>
+          </div>
+          <div style="display:flex;gap:10px;align-items:center;margin:16px 0">
+            <label class="meta" for="qty">Quantità</label>
+            <input id="qty" type="number" min="1" value="1" style="width:90px;padding:10px;border:1px solid #ddd;border-radius:10px"/>
+          </div>
+          <div style="display:flex;gap:12px;flex-wrap:wrap;margin:18px 0 24px">
+            <a class="button" href="#">Aggiungi al carrello</a>
+            <a class="button alt" href="#">Compra ora</a>
+          </div>
+          <ul class="meta" style="line-height:1.9;padding-left:18px">
+            <li>Tracciabilità con QR code</li>
+            <li>Packaging plastic-free</li>
+            <li>Spedizione a impatto compensato</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Le Sarte -->
+  <section id="sarte" class="section" aria-labelledby="sarte-title">
+    <div class="container">
+      <div class="head">
+        <div>
+          <div class="kicker">Le Sarte</div>
+          <h2 id="sarte-title" class="headline" style="font-size:clamp(22px,3vw,34px)">Le mani dietro ai capi</h2>
+        </div>
+        <a class="button" href="#">Conosci tutte</a>
+      </div>
+      <div class="artists" role="list">
+        <div role="listitem" class="artist">
+          <img class="avatar" alt="Ritratto di Amina, sarta a Dakar" src="assets/sarte/amina.jpg"/>
+          <div>Amina</div>
+          <div class="meta">Dakar</div>
+        </div>
+        <div role="listitem" class="artist">
+          <img class="avatar" alt="Ritratto di Zahara, sarta a Nairobi" src="assets/sarte/zahara.jpg"/>
+          <div>Zahara</div>
+          <div class="meta">Nairobi</div>
+        </div>
+        <div role="listitem" class="artist">
+          <img class="avatar" alt="Ritratto di Lindiwe, sarta a Cape Town" src="assets/sarte/lindiwe.jpg"/>
+          <div>Lindiwe</div>
+          <div class="meta">Cape Town</div>
+        </div>
+        <div role="listitem" class="artist">
+          <img class="avatar" alt="Ritratto di Awa, sarta ad Abidjan" src="assets/sarte/awa.jpg"/>
+          <div>Awa</div>
+          <div class="meta">Abidjan</div>
+        </div>
+        <div role="listitem" class="artist">
+          <img class="avatar" alt="Ritratto di Hawi, sarta ad Addis Abeba" src="assets/sarte/hawi.jpg"/>
+          <div>Hawi</div>
+          <div class="meta">Addis Abeba</div>
+        </div>
+        <div role="listitem" class="artist">
+          <img class="avatar" alt="Ritratto di Thandi, sarta a Johannesburg" src="assets/sarte/thandi.jpg"/>
+          <div>Thandi</div>
+          <div class="meta">Johannesburg</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Processo -->
+  <section class="section" aria-labelledby="process-title">
+    <div class="container">
+      <div class="head">
+        <div>
+          <div class="kicker">Il ciclo dei tessuti</div>
+          <h2 id="process-title" class="headline" style="font-size:clamp(22px,3vw,34px)">Da scarto a bellezza</h2>
+        </div>
+      </div>
+      <div class="process">
+        <div class="step">
+          <div class="num">1️⃣ Recupero</div>
+          <p class="meta">Selezioniamo rimanenze e scarti di qualità.</p>
+        </div>
+        <div class="step">
+          <div class="num">2️⃣ Creazione</div>
+          <p class="meta">Le sarte trasformano i materiali in capi unici.</p>
+        </div>
+        <div class="step">
+          <div class="num">3️⃣ Rinascita</div>
+          <p class="meta">Ogni pezzo racconta una storia autentica.</p>
+        </div>
+        <div class="step">
+          <div class="num">4️⃣ Nuova vita</div>
+          <p class="meta">Packaging sostenibile e tracciabilità via QR.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Impatto -->
+  <section id="impatto" class="section" aria-labelledby="impact-title">
+    <div class="container">
+      <div class="head">
+        <div>
+          <div class="kicker">Impatto</div>
+          <h2 id="impact-title" class="headline" style="font-size:clamp(22px,3vw,34px)">Numeri che contano</h2>
+        </div>
+        <a class="button" href="#">Scopri di più</a>
+      </div>
+      <div class="stats" role="list">
+        <div class="stat" role="listitem"><div class="value">1.200 m</div><div class="label">Tessuto salvato</div></div>
+        <div class="stat" role="listitem"><div class="value">25</div><div class="label">Sarte impiegate</div></div>
+        <div class="stat" role="listitem"><div class="value">10.000 kg</div><div class="label">CO₂ evitata</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Blog -->
+  <section id="blog" class="section" aria-labelledby="blog-title">
+    <div class="container">
+      <div class="head">
+        <div>
+          <div class="kicker">Dal Blog</div>
+          <h2 id="blog-title" class="headline" style="font-size:clamp(22px,3vw,34px)">Cultura, sostenibilità e stile</h2>
+        </div>
+        <a class="button" href="#">Leggi tutto</a>
+      </div>
+      <div class="blog">
+        <article class="post">
+          <div class="media ratio">
+            <img alt="Articolo sulla tintura naturale" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 450'><rect width='800' height='450' fill='%23eedfd1'/><text x='40' y='420' font-size='28' font-family='Arial' fill='%232a2a2a' opacity='.6'>Post 1 · Placeholder</text></svg>"/>
+          </div>
+          <div class="body">
+            <strong>Tinture naturali: guida rapida</strong>
+            <p class="meta">Come valorizziamo gli scarti vegetali per i colori.</p>
+          </div>
+        </article>
+        <article class="post">
+          <div class="media ratio">
+            <img alt="Articolo sulla filiera etica" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 450'><rect width='800' height='450' fill='%23f7efe6'/><text x='40' y='420' font-size='28' font-family='Arial' fill='%232a2a2a' opacity='.6'>Post 2 · Placeholder</text></svg>"/>
+          </div>
+          <div class="body">
+            <strong>Cos'è una filiera trasparente</strong>
+            <p class="meta">Dati, tracciabilità e impatto reale.</p>
+          </div>
+        </article>
+        <article class="post">
+          <div class="media ratio">
+            <img alt="Articolo sull'arte del patchwork" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 450'><rect width='800' height='450' fill='%23e9dccd'/><text x='40' y='420' font-size='28' font-family='Arial' fill='%232a2a2a' opacity='.6'>Post 3 · Placeholder</text></svg>"/>
+          </div>
+          <div class="body">
+            <strong>L'arte del patchwork africano</strong>
+            <p class="meta">Storie di motivi, simboli e maestria.</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA finale -->
+  <section class="section">
+    <div class="container">
+      <div class="cta" role="region" aria-label="Invito all'azione">
+        <div>
+          <h3 class="headline" style="font-size:clamp(22px,3vw,34px);color:#fff;margin:0 0 8px">Unisciti a chi indossa un cambiamento</h3>
+          <p style="margin:0;opacity:.9">Iscriviti per ricevere storie dal nostro atelier e anteprime delle collezioni.</p>
+        </div>
+        <a class="button" href="#">Iscriviti alla newsletter</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container foot">
+      <div>
+        <div class="brand" style="margin-bottom:10px"><span class="brand-badge"></span><strong>UbuntuWear</strong></div>
+        <p class="meta">Moda etica, cucita a mano da sarte africane con tessuti recuperati.</p>
+      </div>
+      <div>
+        <strong>Menu</strong>
+        <ul style="list-style:none;padding:0;margin:10px 0 0;line-height:1.9">
+          <li><a href="#shop">Shop</a></li>
+          <li><a href="#sarte">Le Sarte</a></li>
+          <li><a href="#impatto">Impatto</a></li>
+          <li><a href="#blog">Blog</a></li>
+        </ul>
+      </div>
+      <div>
+        <strong>Supporto</strong>
+        <ul style="list-style:none;padding:0;margin:10px 0 0;line-height:1.9">
+          <li><a href="#">Spedizioni & Resi</a></li>
+          <li><a href="#">FAQ</a></li>
+          <li><a href="#">Contatti</a></li>
+          <li><a href="#">Privacy</a></li>
+        </ul>
+      </div>
+      <div class="newsletter">
+        <strong>Newsletter</strong>
+        <p class="meta">Ricevi novità e storie dall'atelier.</p>
+        <div style="display:flex;gap:10px;align-items:center">
+          <input type="email" placeholder="La tua email" aria-label="Inserisci la tua email" />
+          <a class="button" href="#">Iscriviti</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+    <script>
+    // Theme toggle with persistence & mobile menu
+    (function(){
+      const root = document.documentElement;
+      const saved = localStorage.getItem('theme');
+      if(saved === 'dark'){ root.classList.add('dark'); }
+      const btn = document.getElementById('themeToggle');
+      if(btn){ btn.addEventListener('click', () => {
+        root.classList.toggle('dark');
+        localStorage.setItem('theme', root.classList.contains('dark') ? 'dark' : 'light');
+      }); }
+      const menuBtn = document.getElementById('menuToggle');
+      const nav = document.getElementById('mainNav');
+      if(menuBtn && nav){ menuBtn.addEventListener('click', ()=> nav.classList.toggle('open')); }
+      // Header scroll effect
+      const header = document.querySelector('header.site');
+      const onScroll = () => {
+        if(window.scrollY > 10){ header.classList.add('scrolled'); }
+        else { header.classList.remove('scrolled'); }
+      };
+      onScroll();
+      window.addEventListener('scroll', onScroll, {passive:true});
+    })();
+  </script>
+  <!-- Lightbox markup -->
+  <div id="lightbox" class="lightbox" aria-hidden="true" aria-label="Lightbox foto">
+    <img alt="Anteprima foto" />
+  </div>
+
+  <script>
+    // Extend existing IIFE by adding filters + lightbox
+    (function(){
+      // existing code is above; we extend below
+      // Filters
+      const areaSel = document.getElementById('f-area');
+      const skillChecks = Array.from(document.querySelectorAll('.f-skill'));
+      const cards = Array.from(document.querySelectorAll('.profile-card'));
+      function applyFilters(){
+        const area = areaSel ? areaSel.value : 'all';
+        const activeSkills = skillChecks.filter(c=>c.checked).map(c=>c.value.toLowerCase());
+        cards.forEach(card=>{
+          const cArea = (card.dataset.area||'').toLowerCase();
+          const cSkills = (card.dataset.skills||'').toLowerCase();
+          const areaOk = area==='all' || cArea===area;
+          const skillsOk = activeSkills.length===0 || activeSkills.every(s => cSkills.includes(s));
+          card.classList.toggle('hidden', !(areaOk && skillsOk));
+        });
+      }
+      if(areaSel){ areaSel.addEventListener('change', applyFilters); }
+      skillChecks.forEach(c=> c.addEventListener('change', applyFilters));
+      applyFilters();
+
+      // Lightbox
+      const lb = document.getElementById('lightbox');
+      const lbImg = lb ? lb.querySelector('img') : null;
+      function openLB(src, alt){ if(lb && lbImg){ lbImg.src = src; lbImg.alt = alt||''; lb.classList.add('open'); lb.setAttribute('aria-hidden','false'); } }
+      function closeLB(){ if(lb){ lb.classList.remove('open'); lb.setAttribute('aria-hidden','true'); } }
+      document.addEventListener('click', (e)=>{
+        const t = e.target;
+        if(t && t.classList.contains('photo')){ e.preventDefault(); openLB(t.src, t.alt); }
+        if(t && (t.id==='lightbox' || t.closest('#lightbox'))){ if(t.id==='lightbox'){ closeLB(); } }
+      });
+      document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeLB(); });
+    })();
+  </script>
+</body>
+</html>
